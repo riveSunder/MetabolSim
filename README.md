@@ -8,7 +8,7 @@ MetabolSim netlist entries describe network elements like so:
 ICD> -5 6 [0.000008 0.006625 0.00013 0.00006625] (1.0)
 ```
 
-In this example ICD is [socitrate dehydrogenase](https://en.wikipedia.org/wiki/Isocitrate_dehydrogenase), an important enzyme in the [citric acid cycle](). The parameters in the list are enzyme kinetics coefficients, and the number in parenthesis is the relative concentration of the enzymei. The two naked numbers in between the enzyme designation and the list of kinetics coefficients denotes the nodes that the enzyme connects to, and defines the sign convention for normal flux. 
+In this example ICD is [isocitrate dehydrogenase](https://en.wikipedia.org/wiki/Isocitrate_dehydrogenase), an important enzyme in the [citric acid cycle](). The parameters in the list are enzyme kinetics coefficients, and the number in parenthesis is the relative concentration of the enzymei. The two naked numbers in between the enzyme designation and the list of kinetics coefficients denotes the nodes that the enzyme connects to, and defines the sign convention for normal flux. 
 of this
 
 Following the biochemical network description, MetabolSim expects extra information in the `*Met` section. This section contains the starting concentrations (again in parenthesis) for the metabolites themselves, each assigned to a node.
