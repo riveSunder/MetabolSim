@@ -3,6 +3,7 @@
 #This code was used as the basis for a presentation at the 2011 Wind River Conference On Prokaryotic Biology, June 2011, Estes Park Colorado. 
 #
 
+import time
 
 class matrix:
     def __init__(self,cont = [[]]):
@@ -81,7 +82,6 @@ class matrix:
            
             
             
-        print (result)
         return matrix(result)
 
     def display(self):
@@ -114,37 +114,38 @@ class network:
         self.vMetNames = []
         self.runCom = runCom
  
-    def tRun(self, file):#, tDur = 1.0, tRes = 0.01):
+    def tRun(self, my_file):#, tDur = 1.0, tRes = 0.01):
         """variable timestep kinetics simulation"""
         #file = openResFile()
+
         tDur = self.runCom[1]
         tRes = self.runCom[2]
         mtMetResults = self.vMet
         mtEnzResults = self.vEnz
         i = 0
         k = 0
-        writeResFile(file,str(i))
+        writeResFile(my_file,str(i))
         while (k < len(self.vMet.m)):
-            writeResFile(file,str('\t') +  str(self.vMet.m[k][0]))
+            writeResFile(my_file,str('\t') +  str(self.vMet.m[k][0]))
             k+=1
-        writeResFile(file,'\n')
+        writeResFile(my_file,'\n')
                      
         while ( i < tDur ):
             mtMetResults = self.mStoch.times(self.buildFluxVector().sTimes(tRes))
             x = 0
             #self.vMet = self.vMet.add(mtMetResults)
             while ( x < len(self.vMet.m)):
-                self.vMet.m[x][0] = max((self.vMet.m[x][0] + mtMetResults.m[x][0]),0.0)            #Right now just modify state of vMet
+                self.vMet.m[x][0] = max((self.vMet.m[x][0] + mtMetResults.m[x][0]),0.0)            
                 x += 1
             i += tRes
             k = 0
-            writeResFile(file,str(i))
+            writeResFile(my_file,str(i))
             while (k < len(self.vMet.m)):
-                writeResFile(file,str('\t') +  str(self.vMet.m[k][0]))         #0.0 max statement is a fudge factor for now to avoid problems arising from too large of step resolution
+                writeResFile(my_file,str('\t') +  str(self.vMet.m[k][0]))
                 k+=1
-            writeResFile(file,'\n')
+            writeResFile(my_file,'\n')
 
-    def paraEnzRun(self, file, Enz = 0, rng = [0.0,1.0], rngRes = 0.1):
+    def paraEnzRun(self, my_file, Enz = 0, rng = [0.0,1.0], rngRes = 0.1):
         cnc = rng[0]
         f = readFile()
         metVec = getMetVec(f)
@@ -152,11 +153,11 @@ class network:
         while (cnc < rng[1]):
             self.vMet = matrix(getConcs(metVec))
             A.vEnz.m[Enz][0] = cnc
-            writeResFile(file,'\n')#conc\t'+str(cnc)+'\n')
-            self.tRun(file)
+            writeResFile(my_file,'\n')#conc\t'+str(cnc)+'\n')
+            self.tRun(my_file)
             cnc += rngRes
 
-    def phasePlane(self, file, Met = 0, rng = [0.0,1.0], rngRes = 0.1, consts = [], const = []):
+    def phasePlane(self, my_file, Met = 0, rng = [0.0,1.0], rngRes = 0.1, consts = [], const = []):
                
         cnc = rng[0]
         while (cnc < rng[1]):
@@ -166,11 +167,11 @@ class network:
                 self.vMet.m[consts[i]][0] = const[i]
                 i += 1
             self.vMet.m[Met][0] = cnc
-            writeResFile(file,'\n')#+'conc\t' + str(cnc) + '\n')
-            self.tRun(file)
+            writeResFile(my_file,'\n')#+'conc\t' + str(cnc) + '\n')
+            self.tRun(my_file)
             cnc += rngRes
             
-    def paraMetRun(self, file, Met = 0, rng = [0.0,1.0], rngRes = 0.1):
+    def paraMetRun(self, my_file, Met = 0, rng = [0.0,1.0], rngRes = 0.1):
         f = readFile()
         metVec = getMetVec(f)
         #netList = getNetList(f)
@@ -189,8 +190,8 @@ class network:
         while (cnc < rng[1]):
             self.vMet = matrix(getConcs(metVec))
             self.vMet.m[Met][0] = cnc
-            writeResFile(file,'\n')#+'conc\t' + str(cnc) + '\n')
-            self.tRun(file)
+            writeResFile(my_file,'\n')#+'conc\t' + str(cnc) + '\n')
+            self.tRun(my_file)
             cnc += rngRes
 
     def detRxnTypes(self,i = 0):
@@ -385,9 +386,9 @@ class network:
         self.mKin.display()
         
 def openResFile():
-    import time
-    path = '/Volumes/QUINTIN/Project/MetabolSiM/Results/MSResults' + time.asctime(time.localtime()).replace(' ','').replace(':','') + '.txt'
-    f = open(path, 'w')
+    file_path = './results/tca_gs_results'\
+            + time.asctime(time.localtime()).replace(' ','').replace(':','') + '.txt'
+    f = open(file_path, 'w')
     return f
     
 def writeResFile(f, strng):
@@ -420,11 +421,11 @@ def parseInput():
 
     return pathway
     
-def readFile():
+def readFile(file_path="./netlist221.txt"):
     #print("Gimme the filepath")
     #path = userInput
-    path = '/Volumes/QUINTIN/Project/MetabolSiM/netList221mM.txt'
-    f = open(path, 'r')
+
+    f = open(file_path, 'r')
     
     red = f.read(536870912) #read in as string, truncate at 1/2GB (should be plenty)
     f.close()
@@ -459,19 +460,16 @@ def parseRunCom(strnTemp):
     while (strnTemp[i] != ')') and (i < len(strnTemp)):
         i += 1
     strng = strnTemp[k+1:i]
-    print(strng)
     
     #return strng
     strng = strng.replace(',','\n')
     strng = strng.splitlines()
-    print(strng)
     
     if (strng[0] == 't'):
         runCom = [0,float(strng[1]),float(strng[2])]
     else:
-        print('boogedy')
+        print("expected first character to be 't'")
 
-    print(runCom)
     return runCom
 
     
@@ -483,7 +481,7 @@ def getRunCom(red):
     k = i + 1
     while (k < len(red)) and (red[k] != '*'):
         k += 1
-    #print(i,k)
+
     return red[(i+4):(k)]
 
 
@@ -568,7 +566,7 @@ def getNodeArray(f):
         if (f[i] != '') and ('>' in f[i]):
             nds.append(getNodes(f[i]))  #populate
         i+=1
-    #print(nds)                      #debug
+        
     return nds
 
 def getNodes(strng):
@@ -584,7 +582,6 @@ def getNodes(strng):
         #maybe clean up node string here by removing adjacent \n         
         i = 0
         nodes = []
-        print(l)
     
         while (i < len(l)):
             nodes.append(int(l[i]))
@@ -600,7 +597,6 @@ def getStochMat(nds):
         m = max(m,max(nds[i]))
         i += 1
     m += 1
-    #print (m-1 , "X", n-1)    
     i = 0
     mt = []
     while (i <= m - 1):
@@ -610,25 +606,26 @@ def getStochMat(nds):
             mt[i].append(0)
             k+=1
         i+=1
-    #print(mt)
     i = 0
     #k = 0           #reinit counter
     while (i < n):
         for k in nds[i]:
-            #print(k)
             if (k < 0):
                 mt[abs(k)][i] += -1
             else:
                 mt[k][i] += 1
-        #print(i)    
         i += 1
-        #print("i = ", i)
-    #print(mt,"\n","\n")
     mt.pop(0)       #Remove from list position 0 (this is a row of 0's 
     #global A
     A = matrix(mt)
     #A.display()
     return A
 
-def go():
-    A = parseInput(); file = openResFile(); A.tRun(file); file.close()
+if __name__ == "__main__":
+    
+    A = parseInput() 
+    my_file = openResFile()
+    A.tRun(my_file)
+    my_file.close()
+
+    print("all done")
