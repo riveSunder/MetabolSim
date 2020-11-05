@@ -47,6 +47,12 @@ To run a simulation of the demo biochemical network with default settings, simpl
 python metabolsim/metabolsim.py
 ```
 
+MetabolSim facilitates experiments like the one shown in the figure below. By simulating the demo network with varying concentrations of isocitrate dehydrogenase, we can see that the equilibrium flux (red squares) through isocitrate lyase becomes positive for very small concentrations of isocitrate dehydrogenase. This is a simplified example, but similar model insights could help pinpoint intervention targets for treating disease.
+
+<div align="center">
+<img src="./assets/idh_shunt.png" width=80%>
+</div>
+
 # Backstory
 
 If you spend some time reading the code of MetabolSim, you may quickly recognize that it is almost entirely, ehm, not good. MetabolSim was my first Python project. It's clear that I had never heard of NumPy (yes NumPy was already established in 2011), and so I wrote my own (slow) classes for matrix and vector math. On the plus side this means there are almost no dependencies as the project was written in pure Python (but it does use `time` to timestamp results files). 
