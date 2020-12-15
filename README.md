@@ -55,7 +55,7 @@ MetabolSim facilitates experiments like the one shown in the figure below. By si
 
 # Backstory
 
-If you spend some time reading the code of MetabolSim, you may quickly recognize that it is almost entirely, ehm, not good. MetabolSim was my first Python project. It's clear that I had never heard of NumPy (yes NumPy was already established in 2011), and so I wrote my own (slow) classes for matrix and vector math. On the plus side this means there are almost no dependencies as the project was written in pure Python (but it does use `time` to timestamp results files). 
+If you spend some time reading the code of MetabolSim, you may notice that the author was apparently ignorant of or unwilling to use NumPy, despite relying heavily on matrix and vector math. The reason for this is simple, and is that MetabolSim was my first Python project. I had no experience with NumPy at the time, and so I wrote my own classes for matrix and vector math. That means it's likely a lot slower than it could be. On the plus side this means there are almost no dependencies as the project was written in pure Python (but it does use `time` to timestamp results files). 
 
 Although the demo network runs quickly on a modern computer, there are plenty of readily accessible changes that should amount to substantial speedups. 
 
