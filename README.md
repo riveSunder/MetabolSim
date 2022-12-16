@@ -55,8 +55,10 @@ MetabolSim facilitates experiments like the one shown in the figure below. By si
 
 # Backstory
 
-If you spend some time reading the code of MetabolSim, you may notice that the author was apparently ignorant of or unwilling to use NumPy, despite relying heavily on matrix and vector math. The reason for this is simple, and is that MetabolSim was my first Python project. I had no experience with NumPy at the time, and so I wrote my own classes for matrix and vector math. That means it's likely a lot slower than it could be. On the plus side this means there are almost no dependencies as the project was written in pure Python (but it does use `time` to timestamp results files). 
+You may notice that the author of MetabolSim was apparently ignorant of or unwilling to use NumPy, despite relying heavily on matrix and vector math. The reason for this is simple, and it is that MetabolSim was my first Python project, and so I wrote my own classes for vectors/matrices and their mathematical operators. Although the demo network runs quickly on a modern computer, there are plenty of performance improvements left on the table should one want to simulate Michaelis-Mentis kinetics at scale. 
 
-Although the demo network runs quickly on a modern computer, there are plenty of readily accessible changes that should amount to substantial speedups. 
 
-Updating MetabolSim for better performance and stylistic consistency is on a TODO list, but it's a pretty long list at this point. ;)
+<!-- I had no experience with NumPy at the time, and so I wrote my own classes for matrix and vector math. That means it's likely a lot slower than it could be. On the plus side this means there are almost no dependencies as the project was written in pure Python (but it does use `time` to timestamp results files). -->
+
+
+<!-- Updating MetabolSim for better performance and stylistic consistency is on a TODO list, but it's a pretty long list at this point. ;) -->
